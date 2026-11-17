@@ -130,21 +130,24 @@ const EX={
   remo:{n:'Remo en polea',sets:4,w:20,inc:2.5,rest:90},
   facepull:{n:'Face pull',sets:3,w:25,inc:2.5,rest:60,lo:12,hi:15},
   curl:{n:'Curl de bíceps',sets:3,w:5,inc:1,rest:60,lo:12,hi:15},
-  martillo:{n:'Curl martillo',sets:3,w:5,inc:1,rest:60,lo:12,hi:15},
+  martillo:{n:'Curl martillo',sets:2,w:5,inc:1,rest:60,lo:12,hi:15},
+  curlbanco:{n:'Curl en banco (máquina)',sets:3,w:12.5,inc:2.5,rest:60},
   presspecho:{n:'Press de pecho (máquina)',sets:3,w:15,inc:2.5,rest:90},
   pressmil:{n:'Press militar (máquina)',sets:3,w:12,inc:2,rest:90},
   elevlat:{n:'Elevaciones laterales',sets:3,w:2,inc:1,rest:60,lo:12,hi:15,note:'Mancuernas. Peso de cada mancuerna.'},
   pajaros:{n:'Pájaros (máquina)',sets:3,w:8,inc:2.5,rest:60,lo:12,hi:15},
-  tripolea:{n:'Tríceps polea con cuerda',sets:3,w:15,inc:2.5,rest:60,lo:12,hi:15}
+  tripolea:{n:'Tríceps polea con cuerda',sets:3,w:20,inc:2.5,rest:60},
+  tritras:{n:'Tríceps tras nuca en polea',sets:3,w:10,inc:2.5,rest:60},
+  fondos:{n:'Fondos tríceps (máquina)',sets:3,w:40,inc:2.5,rest:75}
 };
 Object.values(EX).forEach(e=>{e.lo=e.lo||8;e.hi=e.hi||10});
 const rg=e=>e.lo+'–'+e.hi;
 // un ejercicio en array = varias opciones para ese hueco (se elige en la sesión)
 const DAYS=[
   {id:'d1',n:1,name:'Día 1',focus:'Pierna y glúteo',ex:['hipthrust','prensa',['bulgaras','prensauni'],'femoral','abduc']},
-  {id:'d2',n:2,name:'Día 2',focus:'Espalda y bíceps',ex:['dominadas','jalon','remo','facepull',['curl','martillo']]},
+  {id:'d2',n:2,name:'Día 2',focus:'Espalda y bíceps',ex:['dominadas','jalon','remo','facepull','curl','martillo','curlbanco']},
   {id:'d3',n:3,name:'Día 3',focus:'Glúteo e isquios',ex:['rumano','hipthrust2','prensaalta','patada','cuadri']},
-  {id:'d4',n:4,name:'Día 4',focus:'Pecho, hombro y tríceps',ex:['presspecho','pressmil','elevlat','pajaros','tripolea']}
+  {id:'d4',n:4,name:'Día 4',focus:'Pecho, hombro y tríceps',ex:['presspecho','pressmil','elevlat','pajaros','tripolea','tritras','fondos']}
 ];
 const dayOf=id=>DAYS.find(d=>d.id===id);
 
