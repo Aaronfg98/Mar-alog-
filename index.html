@@ -113,35 +113,38 @@ svg.chart{width:100%;height:auto;display:block}
 <script>
 'use strict';
 /* ====== RUTINA DE MARÍA ====== */
-const LO=8, HI=10;
 const EX={
-  hipthrust:{n:'Hip thrust',sets:3,w:10,inc:2.5,rest:120},
+  hipthrust:{n:'Hip thrust',sets:4,w:10,inc:2.5,rest:120},
+  hipthrust2:{n:'Hip thrust (más reps)',sets:3,w:10,inc:2.5,rest:90,lo:12,hi:15,note:'Peso más ligero y más repeticiones, con pausa arriba.'},
   prensa:{n:'Prensa',sets:3,w:50,inc:5,rest:120},
+  prensaalta:{n:'Prensa pies altos y anchos',sets:3,w:50,inc:5,rest:120,note:'Pies altos y separados en la plataforma: trabaja más glúteo.'},
   prensauni:{n:'Prensa unilateral',sets:3,w:25,inc:2.5,rest:90,uni:true,note:'Reps por pierna: I = izquierda, D = derecha.'},
   bulgaras:{n:'Sentadilla búlgara',sets:3,w:12.5,inc:2.5,rest:90,uni:true,note:'Peso de cada mancuerna. Reps por pierna: I / D.'},
-  femoral:{n:'Femoral tumbado',sets:3,w:22.5,inc:2.5,rest:90},
-  abduc:{n:'Abducciones',sets:3,w:50,inc:5,rest:75},
-  cuadri:{n:'Cuádriceps sentado',sets:3,w:25,inc:2.5,rest:90},
+  rumano:{n:'Peso muerto rumano',sets:3,w:15,inc:2.5,rest:120,note:'Cadera hacia atrás, espalda neutra, barra pegada a las piernas. Baja hasta notar tensión en los isquios.'},
+  femoral:{n:'Femoral tumbado',sets:3,w:17.5,inc:2.5,rest:75,lo:12,hi:15},
+  abduc:{n:'Abducciones',sets:3,w:40,inc:5,rest:60,lo:12,hi:15},
+  patada:{n:'Patada de glúteo en polea',sets:3,w:5,inc:2.5,rest:60,lo:12,hi:15,uni:true,note:'Reps por pierna: I / D. Sube sin arquear la zona lumbar.'},
+  cuadri:{n:'Cuádriceps sentado',sets:3,w:20,inc:2.5,rest:75,lo:12,hi:15},
   dominadas:{n:'Dominadas asistidas',sets:3,w:40,inc:2.5,rest:120,assist:true,note:'Peso de asistencia: cuanto MENOS pongas, mejor. Baja cuando saques 10 reps en todas.'},
   jalon:{n:'Jalón al pecho neutro abierto',sets:3,w:27,inc:2.5,rest:90},
-  remo:{n:'Remo en polea',sets:3,w:20,inc:2.5,rest:90},
-  facepull:{n:'Face pull',sets:3,w:30,inc:2.5,rest:75},
-  curl:{n:'Curl de bíceps',sets:3,w:5,inc:1,rest:60},
-  martillo:{n:'Curl martillo',sets:2,w:5,inc:1,rest:60},
-  curlbanco:{n:'Curl en banco (máquina)',sets:3,w:12.5,inc:2.5,rest:60},
+  remo:{n:'Remo en polea',sets:4,w:20,inc:2.5,rest:90},
+  facepull:{n:'Face pull',sets:3,w:25,inc:2.5,rest:60,lo:12,hi:15},
+  curl:{n:'Curl de bíceps',sets:3,w:5,inc:1,rest:60,lo:12,hi:15},
+  martillo:{n:'Curl martillo',sets:3,w:5,inc:1,rest:60,lo:12,hi:15},
+  presspecho:{n:'Press de pecho (máquina)',sets:3,w:15,inc:2.5,rest:90},
   pressmil:{n:'Press militar (máquina)',sets:3,w:12,inc:2,rest:90},
-  elevlat:{n:'Elevaciones laterales',sets:3,w:3,inc:1,rest:60,note:'Mancuernas. Peso de cada mancuerna.'},
-  pajaros:{n:'Pájaros (máquina)',sets:3,w:10,inc:2.5,rest:60},
-  tripolea:{n:'Tríceps polea con cuerda',sets:3,w:20,inc:2.5,rest:60},
-  tritras:{n:'Tríceps tras nuca en polea',sets:3,w:10,inc:2.5,rest:60},
-  fondos:{n:'Fondos tríceps (máquina)',sets:3,w:40,inc:2.5,rest:75}
+  elevlat:{n:'Elevaciones laterales',sets:3,w:2,inc:1,rest:60,lo:12,hi:15,note:'Mancuernas. Peso de cada mancuerna.'},
+  pajaros:{n:'Pájaros (máquina)',sets:3,w:8,inc:2.5,rest:60,lo:12,hi:15},
+  tripolea:{n:'Tríceps polea con cuerda',sets:3,w:15,inc:2.5,rest:60,lo:12,hi:15}
 };
+Object.values(EX).forEach(e=>{e.lo=e.lo||8;e.hi=e.hi||10});
+const rg=e=>e.lo+'–'+e.hi;
 // un ejercicio en array = varias opciones para ese hueco (se elige en la sesión)
 const DAYS=[
-  {id:'d1',n:1,name:'Día 1',focus:'Pierna y glúteo',ex:['hipthrust','prensa',['prensauni','bulgaras'],'femoral','abduc']},
-  {id:'d2',n:2,name:'Día 2',focus:'Espalda y bíceps',ex:['dominadas','jalon','remo','facepull','curl','martillo','curlbanco']},
-  {id:'d3',n:3,name:'Día 3',focus:'Pierna y glúteo',ex:['hipthrust','prensa',['prensauni','bulgaras'],'cuadri','abduc']},
-  {id:'d4',n:4,name:'Día 4',focus:'Hombro y tríceps',ex:['pressmil','elevlat','pajaros','tripolea','tritras','fondos']}
+  {id:'d1',n:1,name:'Día 1',focus:'Pierna y glúteo',ex:['hipthrust','prensa',['bulgaras','prensauni'],'femoral','abduc']},
+  {id:'d2',n:2,name:'Día 2',focus:'Espalda y bíceps',ex:['dominadas','jalon','remo','facepull',['curl','martillo']]},
+  {id:'d3',n:3,name:'Día 3',focus:'Glúteo e isquios',ex:['rumano','hipthrust2','prensaalta','patada','cuadri']},
+  {id:'d4',n:4,name:'Día 4',focus:'Pecho, hombro y tríceps',ex:['presspecho','pressmil','elevlat','pajaros','tripolea']}
 ];
 const dayOf=id=>DAYS.find(d=>d.id===id);
 
@@ -166,7 +169,7 @@ function suggest(id){
   const e=EX[id],last=lastSets(id);
   if(!last)return{w:e.w,up:false,last:null};
   const w=last[0].w;
-  const done=last.length>=e.sets&&last.every(x=>x.r>=HI);
+  const done=last.length>=e.sets&&last.every(x=>x.r>=e.hi);
   return{w:done?Math.round((e.assist?Math.max(0,w-e.inc):w+e.inc)*100)/100:w,up:done,last};
 }
 const newSets=id=>{const sg=suggest(id);return Array.from({length:EX[id].sets},()=>({w:sg.w,r:'',rl:'',rr:'',done:false}))};
@@ -224,9 +227,9 @@ function vHome(a){
 
 /* ====== ENTRENO (lista de días) ====== */
 function vTrain(a){
-  a.innerHTML=`<div class="brand">MARIALOG</div><h1>Entreno</h1><div class="sub">Elige el día. Objetivo: ${LO}–${HI} reps por serie.</div><h2>&nbsp;</h2>${draftBanner()}`+
+  a.innerHTML=`<div class="brand">MARIALOG</div><h1>Entreno</h1><div class="sub">Elige el día. Los básicos van a 8–10 reps y los aislados a 12–15.</div><h2>&nbsp;</h2>${draftBanner()}`+
   DAYS.map(d=>`<div class="card"><div class="row" style="margin-bottom:8px"><div class="dnum">${d.n}</div><div class="sp"><h3>${d.name}</h3><div class="sub">${d.focus}</div></div><button class="btn sm" data-act="start" data-id="${d.id}">Empezar</button></div>
-  <ul class="list">${d.ex.map(s=>{const e=EX[slotDefault(s)];const nm=Array.isArray(s)?s.map(x=>EX[x].n).join(' / '):e.n;return `<li><span>${nm}</span><span>${e.sets}×${LO}–${HI}</span></li>`}).join('')}</ul></div>`).join('');
+  <ul class="list">${d.ex.map(s=>{const e=EX[slotDefault(s)];const nm=Array.isArray(s)?s.map(x=>EX[x].n).join(' / '):e.n;return `<li><span>${nm}</span><span>${e.sets}×${rg(e)}</span></li>`}).join('')}</ul></div>`).join('');
 }
 
 /* ====== SESIÓN ====== */
@@ -253,22 +256,22 @@ const clock=s=>{s=Math.max(0,Math.floor(s));const h=Math.floor(s/3600),m=Math.fl
 function drawSession(){
   const s=DB.draft,d=dayOf(s.dayId);
   $('#sess').innerHTML=`<div class="wrap">
-   <div class="shead"><button class="ico" data-act="back" aria-label="Salir">‹</button><div class="sp"><h3>${d.name} · ${d.focus}</h3><div class="sub">⏱ <span id="elapsed">${clock((Date.now()-s.start)/1000)}</span> · objetivo ${LO}–${HI} reps</div></div><button class="ico" data-act="discard" aria-label="Descartar">🗑</button></div>
+   <div class="shead"><button class="ico" data-act="back" aria-label="Salir">‹</button><div class="sp"><h3>${d.name} · ${d.focus}</h3><div class="sub">⏱ <span id="elapsed">${clock((Date.now()-s.start)/1000)}</span> · ${d.ex.length} ejercicios</div></div><button class="ico" data-act="discard" aria-label="Descartar">🗑</button></div>
    <div id="cards">${s.ids.map((_,i)=>cardHTML(i)).join('')}</div></div>`;
 }
 function summ(last){return last.map(x=>x.r).join('·')+' a '+fmt(last[0].w)+' kg'}
 function cardHTML(i){
   const s=DB.draft,id=s.ids[i],e=EX[id],sets=s.sets[i],slot=dayOf(s.dayId).ex[i],sg=suggest(id),last=sg.last;
   const vars=Array.isArray(slot)?`<div class="vars">${slot.map(v=>`<button data-act="var" data-i="${i}" data-id="${v}" class="${v===id?'on':''}">${EX[v].n}</button>`).join('')}</div>`:'';
-  const tip=sg.up?`<div class="tip">↑ Última vez sacaste ${HI} reps en todas. Hoy sube a ${fmt(sg.w)} kg${e.assist?' (menos asistencia)':''}.</div>`:'';
+  const tip=sg.up?`<div class="tip">↑ Última vez sacaste ${e.hi} reps en todas. Hoy sube a ${fmt(sg.w)} kg${e.assist?' (menos asistencia)':''}.</div>`:'';
   const rows=sets.map((x,j)=>{
     const p=last&&last[j]?(e.uni&&last[j].rl?`${fmt(last[j].w)}×${last[j].rl}/${last[j].rr}`:`${fmt(last[j].w)}×${last[j].r}`):'–';
     const reps=e.uni
       ?`<div class="lr"><input class="in" inputmode="numeric" placeholder="I" value="${x.rl}" data-i="${i}" data-j="${j}" data-f="rl"><input class="in" inputmode="numeric" placeholder="D" value="${x.rr}" data-i="${i}" data-j="${j}" data-f="rr"></div>`
-      :`<input class="in" inputmode="numeric" placeholder="${LO}-${HI}" value="${x.r}" data-i="${i}" data-j="${j}" data-f="r">`;
+      :`<input class="in" inputmode="numeric" placeholder="${e.lo}-${e.hi}" value="${x.r}" data-i="${i}" data-j="${j}" data-f="r">`;
     return `<div class="srow ${x.done?'done':''} ${x.pr?'pr':''}"><span class="n">${j+1}</span><span class="prev">${p}</span><input class="in" inputmode="decimal" value="${fmt(num(x.w))}" data-i="${i}" data-j="${j}" data-f="w">${reps}<button class="chk" data-act="done" data-i="${i}" data-j="${j}" aria-label="Serie hecha">✓</button></div>`;
   }).join('');
-  return `<section class="ex" id="ex${i}"><div class="exh"><div class="sp"><h3>${e.n}</h3><div class="sub">${sets.length} × ${LO}–${HI} reps${last?' · última: '+summ(last):' · primera vez'}</div></div></div>
+  return `<section class="ex" id="ex${i}"><div class="exh"><div class="sp"><h3>${e.n}</h3><div class="sub">${sets.length} × ${rg(e)} reps${last?' · última: '+summ(last):' · primera vez'}</div></div></div>
    ${vars}${tip}
    <div class="srow head"><span>#</span><span>Anterior</span><span>kg</span><span>${e.uni?'I / D':'Reps'}</span><span></span></div>
    ${rows}
@@ -287,12 +290,12 @@ function doneSet(i,j){
   if(x.done){x.done=false;x.pr=false;save();redrawCard(i);return}
   if(e.uni){
     const prev=(x.rl||x.rr)?null:(s.sets[i][j-1]||{});
-    if(!num(x.rl)&&!num(x.rr)){x.rl=(prev&&prev.rl)||LO;x.rr=(prev&&prev.rr)||LO}
+    if(!num(x.rl)&&!num(x.rr)){x.rl=(prev&&prev.rl)||e.lo;x.rr=(prev&&prev.rr)||e.lo}
     else{if(!num(x.rl))x.rl=x.rr;if(!num(x.rr))x.rr=x.rl}
     x.r=Math.min(num(x.rl),num(x.rr));
   }else if(!num(x.r)){
     const pv=s.sets[i][j-1],lp=(suggest(id).last||[])[j];
-    x.r=(pv&&num(pv.r))||(lp&&lp.r)||LO;
+    x.r=(pv&&num(pv.r))||(lp&&lp.r)||e.lo;
   }
   x.done=true;
   // récord: mejor que todo el histórico y que lo ya hecho hoy
